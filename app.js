@@ -19,9 +19,9 @@ let direction = 'right';
 let paused = false
 
 // Apple Placement
-let ax = Math.floor(Math.random() * (canvas.width - blockSize * 2) + blockSize);
-let ay = Math.floor(Math.random() * (canvas.height - blockSize * 2) + blockSize);
-
+let ax;
+let ay;
+placeApple()
 
 window.addEventListener('keydown', (e) => {
     switch (e.code) {
@@ -51,22 +51,22 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
+function placeApple() {
+    ax = Math.floor(Math.random() * (canvas.width - blockSize * 2) + blockSize);
+    ay = Math.floor(Math.random() * (canvas.height - blockSize * 2) + blockSize);
+}
 function restartGame() {
     score = 0;
     snake = [{ x: sx, y: sy }];
     direction = 'right';
     px = sx;
     py = sy;
-    ax = Math.floor(Math.random() * (canvas.width - blockSize * 2) + blockSize);
-    ay = Math.floor(Math.random() * (canvas.height - blockSize * 2) + blockSize);
+    placeApple();
 }
-
 function animate() {
     setTimeout(() => {
         requestAnimationFrame(animate);
-        if(paused) {
-            return;
-        }
+        if(paused) return;
         switch (state) {
             case 'title':
                 titleScreen();
@@ -83,14 +83,12 @@ function animate() {
 function draw() {
     drawCanvas();
     c.beginPath();
-    c.fillStyle = 'lime';
     // Draw Snake
     snake.forEach(seg => {
-        c.fillRect(seg.x, seg.y, blockSize, blockSize);
+        drawRect(seg.x, seg.y, blockSize, 'lime')
     })
     // Draw Apple
-    c.fillStyle = 'red';
-    c.fillRect(ax, ay, blockSize, blockSize);
+    drawRect(ax, ay, blockSize, 'red')
 
     handleCollisions();
     moveSnake();  
@@ -100,12 +98,15 @@ function drawCanvas() {
     c.fillStyle = 'black';
     c.fillRect(0,0,canvas.width, canvas.height)
 }
+function drawRect(x, y, size, color) {
+    c.fillStyle = color;
+    c.fillRect(x,y,size,size);
+}
 function handleCollisions() {
     // Handle Apple Collision
     if (px >= ax && px <= ax + blockSize || px + blockSize >= ax && px + blockSize <= ax + blockSize) {
         if (py >= ay && py <= ay + blockSize || py + blockSize >= ay && py + blockSize <= ay + blockSize) {
-            ax = Math.floor(Math.random() * (canvas.width - blockSize * 2) + blockSize);
-            ay = Math.floor(Math.random() * (canvas.height - blockSize * 2) + blockSize);
+            placeApple();
             score ++;
             snake.push(addSeg())
         }

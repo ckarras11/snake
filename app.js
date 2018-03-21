@@ -50,19 +50,6 @@ window.addEventListener('keydown', (e) => {
             paused = !paused
     }
 })
-
-function placeApple() {
-    ax = Math.floor(Math.random() * (canvas.width - blockSize * 2) + blockSize);
-    ay = Math.floor(Math.random() * (canvas.height - blockSize * 2) + blockSize);
-}
-function restartGame() {
-    score = 0;
-    snake = [{ x: sx, y: sy }];
-    direction = 'right';
-    px = sx;
-    py = sy;
-    placeApple();
-}
 function animate() {
     setTimeout(() => {
         requestAnimationFrame(animate);
@@ -101,6 +88,10 @@ function drawCanvas() {
 function drawRect(x, y, size, color) {
     c.fillStyle = color;
     c.fillRect(x,y,size,size);
+}
+function placeApple() {
+    ax = Math.floor(Math.random() * (canvas.width - blockSize * 2) + blockSize);
+    ay = Math.floor(Math.random() * (canvas.height - blockSize * 2) + blockSize);
 }
 function handleCollisions() {
     // Handle Apple Collision
@@ -171,5 +162,13 @@ function gameOverScreen() {
     c.fillText(`You scored ${score} points`, sx, sy + 40)
     c.fillText('Press "R" to restart', sx, canvas.height - 10)
 
+}
+function restartGame() {
+    score = 0;
+    snake = [{ x: sx, y: sy }];
+    direction = 'right';
+    px = sx;
+    py = sy;
+    placeApple();
 }
 animate()

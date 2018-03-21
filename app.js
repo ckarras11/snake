@@ -16,6 +16,7 @@ let snake = [{ x: sx, y: sy }];
 let px;
 let py;
 let direction = 'right';
+let paused = false
 
 // Apple Placement
 let ax = Math.floor(Math.random() * (canvas.width - blockSize * 2) + blockSize);
@@ -45,6 +46,8 @@ window.addEventListener('keydown', (e) => {
                 state = 'playing';
             } 
             break;
+        case 'KeyP':
+            paused = !paused
     }
 })
 
@@ -61,6 +64,9 @@ function restartGame() {
 function animate() {
     setTimeout(() => {
         requestAnimationFrame(animate);
+        if(paused) {
+            return;
+        }
         switch (state) {
             case 'title':
                 titleScreen();
